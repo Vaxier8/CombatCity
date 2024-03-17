@@ -7,3 +7,5 @@
 /[Uu]ser[Ss]ettings/
 *.vsconfig
 Combat City.sln
+Assembly-CSharp.csproj
+UpgradeLog.htm
