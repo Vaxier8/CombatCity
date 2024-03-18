@@ -8,12 +8,20 @@ public class EnemyAI : MonoBehaviour
 {
     //Waypoints
     public List<Transform> points;
-
+    public EnemyCharacter enemyCharacter;
     public int nextWaypointID; 
     int idChangeValue = 1;
 
-    public float speed = 2f;
 
+
+    void Start()
+    {
+        enemyCharacter = GetComponent<EnemyCharacter>();
+        if (enemyCharacter == null)
+        {
+            Debug.LogError("EnemyCharacter component not found on the GameObject.");
+        }
+    }
     private void Reset()
     {
         Initialize();
@@ -66,7 +74,7 @@ public class EnemyAI : MonoBehaviour
         }
         
         //Move towards goalpoint
-        transform.position = Vector2.MoveTowards(transform.position,goalPoint.position,speed*Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position,goalPoint.position,enemyCharacter.speed*Time.deltaTime);
 
         if (Vector2.Distance(transform.position, goalPoint.position) < 1f) 
         {

@@ -746,6 +746,7 @@ GameObject:
   - component: {fileID: 870521765}
   - component: {fileID: 870521764}
   - component: {fileID: 870521763}
+  - component: {fileID: 870521767}
   m_Layer: 0
   m_Name: Test_Enemy
   m_TagString: Untagged
@@ -783,8 +784,8 @@ MonoBehaviour:
   points:
   - {fileID: 2046594509}
   - {fileID: 695004666}
+  enemyCharacter: {fileID: 0}
   nextWaypointID: 0
-  speed: 2
 --- !u!50 &870521764
 Rigidbody2D:
   serializedVersion: 4
@@ -909,6 +910,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &870521767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870521761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dafe2d3a6f77db944a93e2fbf85ad22f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  speed: 2
+  jumpingPower: 0
+  BehaviorType: Waypoint
 --- !u!1 &1078970241
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,6 +938,7 @@ GameObject:
   - component: {fileID: 1078970242}
   - component: {fileID: 1078970246}
   - component: {fileID: 1078970245}
+  - component: {fileID: 1078970247}
   - component: {fileID: 1078970244}
   m_Layer: 0
   m_Name: Player
@@ -1087,6 +1105,22 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &1078970247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078970241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cc17ec26f39cfa42809ae477f682197, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  speed: 8
+  jumpingPower: 16
+  experiencePoints: 0
 --- !u!1 &1498717956
 GameObject:
   m_ObjectHideFlags: 0
