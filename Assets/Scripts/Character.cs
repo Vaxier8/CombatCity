@@ -10,6 +10,7 @@ public class Character : MonoBehaviour
     public float speed;
     public List<Ability> abilities;
     public float jumpingPower;
+    public bool isInvulnerable = false;
 
     public void TakeDamage(int damage)
     {
@@ -19,5 +20,6 @@ public class Character : MonoBehaviour
         else
             health -= damage;
     }
+
     
 }
