@@ -6,6 +6,7 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 *.vsconfig
-Combat City.sln
+CombatCity.sln
 Assembly-CSharp.csproj
 UpgradeLog.htm
+/.vs/
