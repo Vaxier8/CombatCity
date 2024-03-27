@@ -17,7 +17,11 @@ public class PlayerCharacter : Character
 
     public void LevelUp()
     { 
-        //needs implemented
+        if (experiencePoints >= 10) //placeholder
+        {
+            level += 1;
+            experiencePoints = 0; //reset
+        }
     }
 
     public void UseItem(Item item)

@@ -57,6 +57,11 @@ public class EnemyAI : MonoBehaviour
     private void Update()
     {
         MoveToNextPoint();
+        //Attacking Logic
+        //if (we are in attacking range)
+        {
+            enemyCharacter.takeDamage(new Random().Next(1, 6)); //RNG damage from [1,6] for now
+        }
     }
 
     void MoveToNextPoint()
