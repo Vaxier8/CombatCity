@@ -3,18 +3,24 @@ using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
 using System;
+using UnityEditor.Callbacks;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class EnemyAI : MonoBehaviour
 {
+    public enum EnemyType
+    {
+        Waypointer,
+        Chaser,
+    }
     //Waypoints
     public List<Transform> points;
     public EnemyCharacter enemyCharacter;
-
+    private PlayerCharacter player = null;
     private ScoreBoardManager scoreBoard;
     public int nextWaypointID; 
     int idChangeValue = 1;
-
+    public EnemyType type;
 
 
     void Start()
@@ -28,6 +34,14 @@ public class EnemyAI : MonoBehaviour
         if (scoreBoard == null)
         {
             Debug.LogError("ScoreBoardManager component not found in the scene.");
+        }
+        if(type == EnemyType.Chaser)
+        {
+                player = FindObjectOfType<PlayerCharacter>();
+                if (player == null)
+                {
+                    Debug.LogError("PlayerCharacter component not found in the scene.");
+                }
         }
     }
     private void Reset()
@@ -48,23 +62,47 @@ public class EnemyAI : MonoBehaviour
 
         //Makes object a child of the root
         transform.SetParent(root.transform);
+        switch(type)
+        {
+            case EnemyType.Waypointer:
+            {
+                GameObject waypoints = new GameObject("Waypoints");
+                waypoints.transform.position = root.transform.position;
 
-        GameObject waypoints = new GameObject("Waypoints");
-        waypoints.transform.position = root.transform.position;
+                waypoints.transform.SetParent(root.transform);
 
-        waypoints.transform.SetParent(root.transform);
+                GameObject p1 = new GameObject("Point1"); p1.transform.SetParent(waypoints.transform);p1.transform.position = root.transform.position;
+                GameObject p2 = new GameObject("Point2"); p2.transform.SetParent(waypoints.transform); p2.transform.position = root.transform.position;
 
-        GameObject p1 = new GameObject("Point1"); p1.transform.SetParent(waypoints.transform);p1.transform.position = root.transform.position;
-        GameObject p2 = new GameObject("Point2"); p2.transform.SetParent(waypoints.transform); p2.transform.position = root.transform.position;
+                points = new List<Transform>();
+                points.Add(p1.transform);
+                points.Add(p2.transform);
+                break;
+            }
+            case EnemyType.Chaser:
+            {
+                break;
+            }
 
-        points = new List<Transform>();
-        points.Add(p1.transform);
-        points.Add(p2.transform);
+        }
     }
 
     private void Update()
     {
-        MoveToNextPoint();
+        switch(type)
+        {
+            case EnemyType.Waypointer:
+            {
+                MoveToNextPoint();
+                break;
+            }
+            case EnemyType.Chaser:
+            {
+                chasePlayer();
+                break;
+            }
+        }
+
         if(enemyCharacter.health <= 0)
         {
             Die();
@@ -74,6 +112,15 @@ public class EnemyAI : MonoBehaviour
     {
         scoreBoard.addScore(100);
         Destroy(gameObject);
+    }
+    void chasePlayer()
+    {
+        //Placeholder until I want to work out A* pathfinding for platforming (pain)
+        if(player.transform != null)
+        {
+            Vector2 xPos = new Vector2(player.transform.position.x, transform.position.y);
+            transform.position = Vector2.MoveTowards(transform.position, xPos, enemyCharacter.speed*Time.deltaTime);
+        }
     }
     void MoveToNextPoint()
     {
