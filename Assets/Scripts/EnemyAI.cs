@@ -10,6 +10,8 @@ public class EnemyAI : MonoBehaviour
     //Waypoints
     public List<Transform> points;
     public EnemyCharacter enemyCharacter;
+
+    private ScoreBoardManager scoreBoard;
     public int nextWaypointID; 
     int idChangeValue = 1;
 
@@ -21,6 +23,11 @@ public class EnemyAI : MonoBehaviour
         if (enemyCharacter == null)
         {
             Debug.LogError("EnemyCharacter component not found on the GameObject.");
+        }
+        scoreBoard = FindObjectOfType<ScoreBoardManager>();
+        if (scoreBoard == null)
+        {
+            Debug.LogError("ScoreBoardManager component not found in the scene.");
         }
     }
     private void Reset()
@@ -65,6 +72,7 @@ public class EnemyAI : MonoBehaviour
     }
     private void Die()
     {
+        scoreBoard.addScore(100);
         Destroy(gameObject);
     }
     void MoveToNextPoint()
