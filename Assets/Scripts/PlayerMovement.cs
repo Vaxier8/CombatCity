@@ -5,7 +5,9 @@ public class PlayerMovement : MonoBehaviour
     private PlayerCharacter playerCharacter;
     private float horizontal;
     private bool isFacingRight = true;
-    private bool isKnockedBack = false; 
+    private bool isKnockedBack = false;
+    private bool isJumping = false;
+    public Animator animator;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
@@ -22,12 +24,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        animator.SetBool("IsJumping", !IsGrounded());
         if (isKnockedBack) return; // Disable input if player is being knocked back
 
         horizontal = Input.GetAxisRaw("Horizontal");
 
+        animator.SetFloat("Speed", Mathf.Abs(horizontal));
+
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
+
             rb.velocity = new Vector2(rb.velocity.x, playerCharacter.jumpingPower);
         }
 
@@ -40,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Knockback(10f); 
         }
+
 
         Flip();
     }

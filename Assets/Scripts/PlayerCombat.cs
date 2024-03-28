@@ -10,6 +10,7 @@ public class PlayerCombat : MonoBehaviour
     private PlayerMovement playerMovement;
     [SerializeField] private GameObject hitboxPrefab;
     [SerializeField] private Transform hitboxSpawnPoint;
+    public Animator animator;
     void Start()
     {
         playerCharacter = GetComponent<PlayerCharacter>();
@@ -49,6 +50,7 @@ public class PlayerCombat : MonoBehaviour
         {
             if(attackCooldown == false)
             {
+                animator.SetBool("IsPunching", true);
                 Vector3 attackOffset;
                 if(playerMovement.getFacingRight())
                 {
@@ -59,6 +61,7 @@ public class PlayerCombat : MonoBehaviour
                 attackOffset = new Vector3(-1,0.67f,0);
                 }
                 attackCooldown = true;
+                animator.SetBool("IsPunching", false);
                 Attack(attackOffset, new Vector3(0.25f,0.25f,0.25f));
             }
         }
