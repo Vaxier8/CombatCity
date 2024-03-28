@@ -50,7 +50,6 @@ public class PlayerCombat : MonoBehaviour
         {
             if(attackCooldown == false)
             {
-                animator.SetBool("IsPunching", true);
                 Vector3 attackOffset;
                 if(playerMovement.getFacingRight())
                 {
@@ -61,27 +60,26 @@ public class PlayerCombat : MonoBehaviour
                 attackOffset = new Vector3(-1,0.67f,0);
                 }
                 attackCooldown = true;
-                animator.SetBool("IsPunching", false);
                 Attack(attackOffset, new Vector3(0.25f,0.25f,0.25f));
             }
         }
     }
     void Attack(Vector3 offset, Vector3 scale)
     {
+        animator.SetBool("IsPunching", true);
         Vector3 offsetPosition = hitboxSpawnPoint.position + offset;
         GameObject hitbox = Instantiate(hitboxPrefab, offsetPosition, hitboxSpawnPoint.rotation);
         hitbox.transform.localScale = scale;
-        StartCoroutine(AttackWindow(hitbox, 10));
+        hitbox.transform.SetParent(this.transform, true);
+
+        StartCoroutine(AttackWindow(hitbox, .5f));
     }
 
-    IEnumerator AttackWindow(GameObject objectToDestroy, int delay)
+    IEnumerator AttackWindow(GameObject objectToDestroy, float delay)
     {
-        // Wait until next frame
-        for(int i = 0; i < delay; i++)
-        {
-            yield return null;
-        }
+        yield return new WaitForSeconds(delay);
 
+        animator.SetBool("IsPunching", false);
         // Then destroy the object
         attackCooldown = false;
         Destroy(objectToDestroy);
