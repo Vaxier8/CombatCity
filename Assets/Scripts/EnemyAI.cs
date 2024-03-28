@@ -8,11 +8,7 @@ using UnityEditor.Callbacks;
 [RequireComponent(typeof(BoxCollider2D))]
 public class EnemyAI : MonoBehaviour
 {
-    public enum EnemyType
-    {
-        Waypointer,
-        Chaser,
-    }
+
     //Waypoints
     public List<Transform> points;
     public EnemyCharacter enemyCharacter;
@@ -20,12 +16,16 @@ public class EnemyAI : MonoBehaviour
     private ScoreBoardManager scoreBoard;
     public int nextWaypointID; 
     int idChangeValue = 1;
-    public EnemyType type;
+    public String type;
 
 
     void Start()
     {
         enemyCharacter = GetComponent<EnemyCharacter>();
+        if (enemyCharacter != null)
+        {
+            type = enemyCharacter.BehaviorType;
+        }
         if (enemyCharacter == null)
         {
             Debug.LogError("EnemyCharacter component not found on the GameObject.");
@@ -35,7 +35,7 @@ public class EnemyAI : MonoBehaviour
         {
             Debug.LogError("ScoreBoardManager component not found in the scene.");
         }
-        if(type == EnemyType.Chaser)
+        if(type.Equals("Chaser"))
         {
                 player = FindObjectOfType<PlayerCharacter>();
                 if (player == null)
@@ -64,7 +64,7 @@ public class EnemyAI : MonoBehaviour
         transform.SetParent(root.transform);
         switch(type)
         {
-            case EnemyType.Waypointer:
+            case "Waypoint":
             {
                 GameObject waypoints = new GameObject("Waypoints");
                 waypoints.transform.position = root.transform.position;
@@ -79,7 +79,7 @@ public class EnemyAI : MonoBehaviour
                 points.Add(p2.transform);
                 break;
             }
-            case EnemyType.Chaser:
+            case "Chaser":
             {
                 break;
             }
@@ -91,12 +91,12 @@ public class EnemyAI : MonoBehaviour
     {
         switch(type)
         {
-            case EnemyType.Waypointer:
+            case "Waypoint":
             {
                 MoveToNextPoint();
                 break;
             }
-            case EnemyType.Chaser:
+            case "Chaser":
             {
                 chasePlayer();
                 break;
@@ -120,6 +120,15 @@ public class EnemyAI : MonoBehaviour
         {
             Vector2 xPos = new Vector2(player.transform.position.x, transform.position.y);
             transform.position = Vector2.MoveTowards(transform.position, xPos, enemyCharacter.speed*Time.deltaTime);
+                    //logic for flipping enemy
+            if (player.transform.position.x > transform.position.x)
+            {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+        else
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
         }
     }
     void MoveToNextPoint()

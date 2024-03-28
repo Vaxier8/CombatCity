@@ -39,6 +39,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 784676823
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Hitbox
+    uniqueID: 97511895
     locked: 0
