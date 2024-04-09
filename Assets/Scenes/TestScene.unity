@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 110798868}
   - component: {fileID: 110798867}
   - component: {fileID: 110798866}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Test_Enemy_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,7 +153,7 @@ Transform:
   m_GameObject: {fileID: 110798864}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.384, y: -1.173, z: 0}
+  m_LocalPosition: {x: -1.783, y: -1.155, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -825,7 +825,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.000013417471, y: 0.0328, z: -10}
+  m_LocalPosition: {x: 0.00000810964, y: 0.0328, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -875,7 +875,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543793595}
   - component: {fileID: 543793594}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CamBounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}

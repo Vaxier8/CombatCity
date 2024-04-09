@@ -4,6 +4,8 @@ using UnityEditor.Rendering;
 using UnityEngine;
 using System;
 using UnityEditor.Callbacks;
+using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class EnemyAI : MonoBehaviour
@@ -14,6 +16,8 @@ public class EnemyAI : MonoBehaviour
     public EnemyCharacter enemyCharacter;
     private PlayerCharacter player = null;
     private ScoreBoardManager scoreBoard;
+    private bool persuing = false;
+    private float persueTime = 1f;
     public int nextWaypointID; 
     int idChangeValue = 1;
     public String type;
@@ -118,17 +122,48 @@ public class EnemyAI : MonoBehaviour
         //Placeholder until I want to work out A* pathfinding for platforming (pain)
         if(player.transform != null)
         {
-            Vector2 xPos = new Vector2(player.transform.position.x, transform.position.y);
-            transform.position = Vector2.MoveTowards(transform.position, xPos, enemyCharacter.speed*Time.deltaTime);
-                    //logic for flipping enemy
-            if (player.transform.position.x > transform.position.x)
+
+            float direction = Mathf.Sign(player.transform.position.x - transform.position.x);
+            Debug.DrawRay(transform.position, new Vector2(direction, 0) * 10, Color.red);
+            int layerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
+            layerMask = ~layerMask;
+            RaycastHit2D hitPlayer = Physics2D.Raycast(transform.position, new Vector2(direction, 0), 10, layerMask);
+            if(hitPlayer.collider != null && hitPlayer.collider.name == "Player")
             {
-                transform.localScale = new Vector3(1, 1, 1);
+                persuing = true;
+                persueTime = 1f;
+                Vector2 xPos = new Vector2(player.transform.position.x, transform.position.y);
+                transform.position = Vector2.MoveTowards(transform.position, xPos, enemyCharacter.speed*Time.deltaTime);
+                            //logic for flipping enemy
+                if (player.transform.position.x > transform.position.x)
+                {
+                    transform.localScale = new Vector3(1, 1, 1);
+                }
+                else
+                {
+                    transform.localScale = new Vector3(-1, 1, 1);
+                }
             }
-        else
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
+            else if (persuing)
+            {
+                persueTime -= Time.deltaTime;
+                if(persueTime <= 0)
+                {
+                    persueTime = 1f;
+                    persuing = false;
+                }
+                Vector2 xPos = new Vector2(player.transform.position.x, transform.position.y);
+                transform.position = Vector2.MoveTowards(transform.position, xPos, enemyCharacter.speed*Time.deltaTime);
+                            //logic for flipping enemy
+                if (player.transform.position.x > transform.position.x)
+                {
+                    transform.localScale = new Vector3(1, 1, 1);
+                }
+                else
+                {
+                    transform.localScale = new Vector3(-1, 1, 1);
+                }  
+            }
         }
     }
     void MoveToNextPoint()

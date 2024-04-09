@@ -23,6 +23,7 @@ public class HitboxCollisionPlayer : MonoBehaviour
         if (enemy != null)
         {
             enemy.takeDamage(new System.Random().Next(1, 6));
+            Destroy(gameObject);
         }
     }
 }
