@@ -12,7 +12,12 @@ public class EnemyAI : MonoBehaviour
 {
 
     //Waypoints
+    private bool attackCooldown;
+    private bool withinRange = false;
+    [SerializeField] private GameObject hitboxEnemyPrefab;
+    [SerializeField] private Transform hitboxSpawnPoint;
     public List<Transform> points;
+    private bool isFacingRight = true;
     public EnemyCharacter enemyCharacter;
     private PlayerCharacter player = null;
     private ScoreBoardManager scoreBoard;
@@ -25,6 +30,7 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
+
         enemyCharacter = GetComponent<EnemyCharacter>();
         if (enemyCharacter != null)
         {
@@ -39,14 +45,14 @@ public class EnemyAI : MonoBehaviour
         {
             Debug.LogError("ScoreBoardManager component not found in the scene.");
         }
-        if(type.Equals("Chaser"))
+        player = FindObjectOfType<PlayerCharacter>();
+        if (player == null)
         {
-                player = FindObjectOfType<PlayerCharacter>();
-                if (player == null)
-                {
-                    Debug.LogError("PlayerCharacter component not found in the scene.");
-                }
-        }
+            Debug.LogError("PlayerCharacter component not found in the scene.");
+         }
+        //if(type.Equals("Chaser"))
+    //    {
+      //  }
     }
     private void Reset()
     {
@@ -93,6 +99,32 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
+        float direction;
+        if(isFacingRight)
+        {
+            direction = Mathf.Sign(1);
+        }
+        else
+        {
+            direction = Mathf.Sign(-1);
+        }
+        Debug.DrawRay(transform.position, new Vector2(direction, 0) * 1, Color.blue);
+        int layerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
+        layerMask = ~layerMask;
+        RaycastHit2D inPlayerRange = Physics2D.Raycast(transform.position, new Vector2(direction, 0), 1, layerMask);
+        if(inPlayerRange.collider != null && inPlayerRange.collider.name == "Player")
+        {
+            //Debug.Log(inPlayerRange.collider.name);
+            withinRange = true;
+        }
+        else
+        {
+            withinRange = false;
+        }
+        if(withinRange)
+        {
+            Attack();
+        }
         switch(type)
         {
             case "Waypoint":
@@ -106,11 +138,51 @@ public class EnemyAI : MonoBehaviour
                 break;
             }
         }
+        
 
         if(enemyCharacter.health <= 0)
         {
             Die();
         }
+    }
+
+    void Attack()
+    {
+                if(attackCooldown == false)
+                {
+                    Vector3 attackOffset;
+                    if(isFacingRight)
+                    {
+                        attackOffset = new Vector3(1,0,0);
+                    }
+                    else
+                    {
+                    attackOffset = new Vector3(-1,0,0);
+                    }
+                    attackCooldown = true;
+                    Attack2(attackOffset, new Vector3(0.25f,0.25f,0.25f));
+                }
+    }
+
+    void Attack2(Vector3 offset, Vector3 scale)
+    {
+        //animator.SetBool("IsPunching", true);
+        Vector3 offsetPosition = hitboxSpawnPoint.position + offset;
+        GameObject hitbox = Instantiate(hitboxEnemyPrefab, offsetPosition, hitboxSpawnPoint.rotation);
+        hitbox.transform.localScale = scale;
+        hitbox.transform.SetParent(this.transform, true);
+
+        StartCoroutine(AttackWindow(hitbox, 1f));
+    }
+
+    IEnumerator AttackWindow(GameObject objectToDestroy, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        //animator.SetBool("IsPunching", false);
+        // Then destroy the object
+        attackCooldown = false;
+        Destroy(objectToDestroy);
     }
     private void Die()
     {
@@ -119,12 +191,16 @@ public class EnemyAI : MonoBehaviour
     }
     void chasePlayer()
     {
+        if(withinRange)
+        {
+            return;
+        }
         //Placeholder until I want to work out A* pathfinding for platforming (pain)
         if(player.transform != null)
         {
 
             float direction = Mathf.Sign(player.transform.position.x - transform.position.x);
-            Debug.DrawRay(transform.position, new Vector2(direction, 0) * 10, Color.red);
+            //Debug.DrawRay(transform.position, new Vector2(direction, 0) * 10, Color.red);
             int layerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
             layerMask = ~layerMask;
             RaycastHit2D hitPlayer = Physics2D.Raycast(transform.position, new Vector2(direction, 0), 10, layerMask);
@@ -138,10 +214,12 @@ public class EnemyAI : MonoBehaviour
                 if (player.transform.position.x > transform.position.x)
                 {
                     transform.localScale = new Vector3(1, 1, 1);
+                    isFacingRight = true;
                 }
                 else
                 {
                     transform.localScale = new Vector3(-1, 1, 1);
+                    isFacingRight = false;
                 }
             }
             else if (persuing)
@@ -158,26 +236,34 @@ public class EnemyAI : MonoBehaviour
                 if (player.transform.position.x > transform.position.x)
                 {
                     transform.localScale = new Vector3(1, 1, 1);
+                    isFacingRight = true;
                 }
                 else
                 {
                     transform.localScale = new Vector3(-1, 1, 1);
+                    isFacingRight = false;
                 }  
             }
         }
     }
     void MoveToNextPoint()
     {
+        if(withinRange)
+        {
+            return;
+        }
         Transform goalPoint = points[nextWaypointID];
 
         //logic for flipping enemy
         if (goalPoint.transform.position.x > transform.position.x)
         {
             transform.localScale = new Vector3(1, 1, 1);
+            isFacingRight = true;
         }
         else
         {
             transform.localScale = new Vector3(-1, 1, 1);
+            isFacingRight = false;
         }
         
         //Move towards goalpoint
