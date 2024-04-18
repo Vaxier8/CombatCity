@@ -26,6 +26,8 @@ public class EnemyAI : MonoBehaviour
     public int nextWaypointID; 
     int idChangeValue = 1;
     public String type;
+    public Rigidbody2D enemyRigid;
+    private float curVelocity = 0;
 
 
     void Start()
@@ -99,6 +101,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
+        curVelocity = enemyRigid.velocity.x;
         float direction;
         if(isFacingRight)
         {
