@@ -6,6 +6,7 @@ using System;
 using UnityEditor.Callbacks;
 using Unity.VisualScripting;
 using UnityEngine.UIElements;
+using UnityEditor.Animations;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class EnemyAI : MonoBehaviour
@@ -27,7 +28,7 @@ public class EnemyAI : MonoBehaviour
     int idChangeValue = 1;
     public String type;
     public Rigidbody2D enemyRigid;
-    private float curVelocity = 0;
+    public Animator animator;
 
 
     void Start()
@@ -101,7 +102,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        curVelocity = enemyRigid.velocity.x;
+        animator.SetBool("persuing", persuing);
         float direction;
         if(isFacingRight)
         {

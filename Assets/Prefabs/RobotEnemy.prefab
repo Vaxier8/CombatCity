@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 799824086227250440}
   - component: {fileID: 1256018606128143751}
   m_Layer: 0
-  m_Name: RobotEnemy 1
+  m_Name: RobotEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,7 +97,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1913690568, guid: 515712e446fc6214a934726113cb4466, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -105,7 +105,7 @@ SpriteRenderer:
   m_Size: {x: 0.27, y: 0.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1823412904290518785
@@ -203,7 +203,7 @@ Transform:
   m_GameObject: {fileID: 5047516869356506173}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.341, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -354,6 +354,7 @@ MonoBehaviour:
   nextWaypointID: 0
   type: 
   enemyRigid: {fileID: 3081062573691297405}
+  animator: {fileID: 7972822194419586492}
 --- !u!114 &5454672450564567436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,7 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dafe2d3a6f77db944a93e2fbf85ad22f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 5
   speed: 2
   jumpingPower: 0
   isInvulnerable: 0
