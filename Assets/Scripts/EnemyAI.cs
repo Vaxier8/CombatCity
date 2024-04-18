@@ -103,6 +103,7 @@ public class EnemyAI : MonoBehaviour
     private void Update()
     {
         animator.SetBool("persuing", persuing);
+
         float direction;
         if(isFacingRight)
         {
@@ -154,6 +155,7 @@ public class EnemyAI : MonoBehaviour
     {
                 if(attackCooldown == false)
                 {
+                    animator.SetTrigger("isAttacking");
                     Vector3 attackOffset;
                     if(isFacingRight)
                     {
@@ -170,7 +172,7 @@ public class EnemyAI : MonoBehaviour
 
     void Attack2(Vector3 offset, Vector3 scale)
     {
-        //animator.SetBool("IsPunching", true);
+        animator.SetTrigger("isAttacking");
         Vector3 offsetPosition = hitboxSpawnPoint.position + offset;
         GameObject hitbox = Instantiate(hitboxEnemyPrefab, offsetPosition, hitboxSpawnPoint.rotation);
         hitbox.transform.localScale = scale;
