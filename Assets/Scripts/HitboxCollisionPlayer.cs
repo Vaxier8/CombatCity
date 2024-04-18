@@ -5,25 +5,30 @@ using System;
 
 public class HitboxCollisionPlayer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private EnemyCharacter enemy;
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        
-    }
-    public void OnTriggerEnter2D(Collider2D col)
-    {
-        enemy = col.GetComponent<EnemyCharacter>();
+        EnemyCharacter enemy = col.GetComponent<EnemyCharacter>();
         if (enemy != null)
         {
+            // Assuming takeDamage and the damage calculation are still required
             enemy.takeDamage(new System.Random().Next(1, 6));
-            Destroy(gameObject);
+
+
+            StartCoroutine(ChangeColorTemporarily(enemy));
         }
+    }
+
+    IEnumerator ChangeColorTemporarily(EnemyCharacter enemy)
+    {
+        SpriteRenderer spriteRenderer = enemy.GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.red;
+            // Wait for 0.25 seconds
+            yield return new WaitForSeconds(0.25f);
+            spriteRenderer.color = Color.white;
+        }
+        Destroy(gameObject);  
     }
 }

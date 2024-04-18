@@ -43,7 +43,7 @@ public class PlayerCombat : MonoBehaviour
                 attackOffset = new Vector3(-1,0,0);
                 }
                 attackCooldown = true;
-                Attack(attackOffset, new Vector3(0.25f,0.25f,0.25f));
+                Attack(attackOffset, new Vector3(1f,.5f,0.25f));
             }
         }
         if(Input.GetButtonDown("Fire2"))
@@ -60,7 +60,7 @@ public class PlayerCombat : MonoBehaviour
                 attackOffset = new Vector3(-1,0.67f,0);
                 }
                 attackCooldown = true;
-                Attack(attackOffset, new Vector3(0.25f,0.25f,0.25f));
+                Attack(attackOffset, new Vector3(2f,2f,0.25f));
             }
         }
     }
